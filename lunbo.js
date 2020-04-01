@@ -1,122 +1,119 @@
 function Lunbo(mylunbo){
 	var count = mylunbo.number;
-	var srcarr = mylunbo.imgs;
-	var container = mylunbo.boxName;
-	var atimer = mylunbo.timer;
-
-	var box = $(container);
-
-	var imgContainer = '<div class="slide"><img src="'+srcarr[count-1]+'" alt=""></div>';
-	var liContainer = '';
+	var images = mylunbo.imgs;
+	var boxs = mylunbo.boxName;
+	var times = mylunbo.time;
+	var contain = $(boxs);
+	var box1 = '<div class="slide"><img src="'+images[count-1]+'" alt=""></div>';
+	var box2 = '';
 	for(var i=0;i<count;i++){
 		var j=i;
-		imgContainer += '<div class="slide"><img src="'+srcarr[i]+'" alt=""></div>';
+		box1 += '<div class="slide"><img src="'+images[i]+'" alt=""></div>';
 		if(i===0){
 			j++;
-			liContainer += '<li class="active">'+j+'</li>'
+			box2 += '<li class="active">'+j+'</li>'
 		}else{
 			j++;
-			liContainer += '<li>'+j+'</li>';
+			box2 += '<li>'+j+'</li>';
 		}
 	}
-	imgContainer += '<div class="slide"><img src="'+srcarr[0]+'" alt=""></div>';
+	box1 += '<div class="slide"><img src="'+images[0]+'" alt=""></div>';
 
-	var html = ''
+	var lunbohtml = ''
 	    + '<div class="slider" id="slider">'
-			+ imgContainer
+			+ box1
 		+ '</div>'
 		+ '<span id="left"><</span>'
 		+ '<span id="right">></span>'
 		+ '<ul class="nav" id="navs">'
-		    + liContainer
+		    + box2
 		+ '</ul>';
 
 	
 	this.show = function(){		
-		box.html(html);
-		
-		var oNavlist = $('#navs').children('li');
+		contain.html(lunbohtml);		
+		var nav = $('#navs').children('li');
 		var slider = $('#slider');		
 		var left = $('#left');
 		var right = $('#right');
 		var index = 1;
 		var timer;
-		var isMoving = false;
+		var move = false;
 
 		slider.css('width',(count+2)*1200+'px');
 		
-		box.mouseover(function () { 
-			animate(left,{opacity:50})
-			animate(right,{opacity:50})
+		contain.mouseover(function () { 
+			lunbo(left,{opacity:50})
+			lunbo(right,{opacity:50})
 			clearInterval(timer)
 		});
-		box.mouseout(function () { 
-			animate(left,{opacity:0})
-			animate(right,{opacity:0})
-			timer = setInterval(next, atimer);
+		contain.mouseout(function () { 
+			lunbo(left,{opacity:0})
+			lunbo(right,{opacity:0})
+			timer = setInterval(down, times);
 		});
 		right.click(function () { 
-			next();
+			down();
 		});
 		left.click(function(){
-			prev();
+			up();
 		});
 
-		for( var i=0; i<oNavlist.length; i++ ){
-			oNavlist[i].index = i;
-			$(oNavlist[i]).click(function () { 
+		for( var i=0; i<nav.length; i++ ){
+			nav[i].index = i;
+			$(nav[i]).click(function () { 
 				index = this.index+1;
-				navmove();
-				animate(slider,{left:-1200*index});
+				moved();
+				lunbo(slider,{left:-1200*index});
 			});
 		}
-		function next(){
-			if(isMoving){
+		function down(){
+			if(move){
 				return;
 			}
-			isMoving = true;
+			move = true;
 			index++;
-			navmove();
-			animate(slider,{left:-1200*index},function(){
+			moved();
+			lunbo(slider,{left:-1200*index},function(){
 				if(index==count+1){ 			
 					slider.css('left','-1200px');
 					index = 1;
 				}
-				isMoving = false;
+				move = false;
 			});
 		}
-		function prev(){
-			if(isMoving){
+		function up(){
+			if(move){
 				return;
 			}
-			isMoving = true;
+			move = true;
 			index--;
-			navmove();
-			animate(slider,{left:-1200*index},function(){
+			moved();
+			lunbo(slider,{left:-1200*index},function(){
 				if(index==0){
 					slider.css('left',-1200*count + 'px'); 
 					index = count; 
 				}
-				isMoving = false;
+				move = false;
 			});
 		}
-		function navmove(){
-			for( var i=0; i<oNavlist.length; i++ ){
-				$(oNavlist[i]).removeClass("active");
+		function moved(){
+			for( var i=0; i<nav.length; i++ ){
+				$(nav[i]).removeClass("active");
 			}
 			if(index > count ){ 
-				$(oNavlist[0]).addClass("active");
+				$(nav[0]).addClass("active");
 			}else if(index<=0){
-				$(oNavlist[count-1]).addClass("active"); 
+				$(nav[count-1]).addClass("active"); 
 			}else {
-				$(oNavlist[index-1]).addClass("active");
+				$(nav[index-1]).addClass("active");
 			}
 		}
-		timer = setInterval(next, atimer);
+		timer = setInterval(down, times);
 		function getStyle(obj, attr){
 			return obj.css(attr);
 		}
-		function animate(obj,json,callback){
+		function lunbo(obj,json,callback){
 			clearInterval(obj.timer);
 			obj.timer = setInterval(function(){
 				var isStop = true;
