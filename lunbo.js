@@ -1,4 +1,4 @@
-function Animate(imgobj){
+function Lunbo(imgobj){
 	var num = imgobj.imgs_num;
 	var srcarr = imgobj.imgs_src;
 	var container = imgobj.imgs_container;

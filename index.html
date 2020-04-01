@@ -13,15 +13,20 @@
 	</body>
 	
 	<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script src="animate.js"></script>
+	<script src="lunbo.js"></script>
 	<script>
-		var obj = new Animate({
-			imgs_num:5,
-			imgs_src:['img/b1.png','img/b2.png','img/b3.png','img/b4.png','img/b5.png'],
-			imgs_container:'#box',
-			timer:1000
+			var lunbo = new Lunbo();
+		lunbo.show({
+			num:5,
+			box:'#box',
+			imgs:[ 'img/b1.png',
+				   'img/b2.png',
+				   'img/b3.png',
+				   'img/b4.png',
+				   'img/b5.png',
+		         ],
+			time:2000
 		});
-		obj.show();
 	</script>
 	
 </html>
