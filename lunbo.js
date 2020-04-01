@@ -81,23 +81,18 @@ function Lunbo(mylunbo){
 			animate(right,{opacity:0})
 			timer = setInterval(down, times);
 		});
-		function moved(){
-			for( var i=0; i<nav.length; i++ ){
-				$(nav[i]).removeClass("active");
-			}
-			if(index > count ){ 
-				$(nav[0]).addClass("active");
-			}else if(index<=0){
-				$(nav[count-1]).addClass("active"); 
-			}else {
-				$(nav[index-1]).addClass("active");
-			}
-		}
+		right.click(function () { 
+			down();
+		});
+		left.click(function(){
+			up();
+		});
+
 		for( var i=0; i<nav.length; i++ ){
 			nav[i].index = i;
 			$(nav[i]).click(function () { 
 				index = this.index+1;
-				moved();
+				navmove();
 				animate(slider,{left:-1200*index});
 			});
 		}
@@ -108,7 +103,7 @@ function Lunbo(mylunbo){
 			}
 			isMoving = true;
 			index++;
-			moved();
+			navmove();
 			animate(slider,{left:-1200*index},function(){
 				if(index==count+1){ 			
 					slider.css('left','-1200px');
@@ -123,7 +118,7 @@ function Lunbo(mylunbo){
 			}
 			isMoving = true;
 			index--;
-			moved();
+			navmove();
 			animate(slider,{left:-1200*index},function(){
 				if(index==0){
 					slider.css('left',-1200*count + 'px'); 
@@ -132,12 +127,18 @@ function Lunbo(mylunbo){
 				isMoving = false;
 			});
 		}
-		right.click(function () { 
-			down();
-		});
-		left.click(function(){
-			up();
-		});
+		function navmove(){
+			for( var i=0; i<nav.length; i++ ){
+				$(nav[i]).removeClass("active");
+			}
+			if(index > count ){ 
+				$(nav[0]).addClass("active");
+			}else if(index<=0){
+				$(nav[count-1]).addClass("active"); 
+			}else {
+				$(nav[index-1]).addClass("active");
+			}
+		}
 		timer = setInterval(down, times);
 		function getStyle(obj, attr){
 			return obj.css(attr);
