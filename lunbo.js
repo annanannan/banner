@@ -1,8 +1,8 @@
-function Lunbo(a){
-	var num = a.number;
-	var srcarr = a.imgs;
-	var container = a.boxName;
-	var atimer = a.timer;
+function Lunbo(imgobj){
+	var num = imgobj.number;
+	var srcarr = imgobj.imgs;
+	var container = imgobj.boxName;
+	var atimer = imgobj.timer;
 
 	var box = $(container);
 
