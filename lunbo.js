@@ -3,7 +3,7 @@ function Lunbo(mylunbo){
 	var images = mylunbo.imgs;
 	var boxs = mylunbo.boxName;
 	var times = mylunbo.time;
-	var contain = $(boxs);
+	var box = $(boxs);
 	var box1 = '<div class="slide"><img src="'+images[count-1]+'" alt=""></div>';
 	var box2 = '';
 	
@@ -31,18 +31,19 @@ function Lunbo(mylunbo){
 	box1 += '<div class="slide"><img src="'+images[0]+'" alt=""></div>';
 	
 	this.show = function(){		
-		contain.html(lunbohtml);
-		var left = $('#left');
-		var right = $('#right');
+		box.html(lunbohtml);
+		
 		var nav = $('#navs').children('li');
 		var slider = $('#slider');		
+		var left = $('#left');
+		var right = $('#right');
 		var index = 1;
 		var timer;
-		var moved = false;
-		function lunbo(obj,json,callback){
+		var isMoving = false;
+		function animate(obj,json,callback){
 			clearInterval(obj.timer);
 			obj.timer = setInterval(function(){
-				var stop = true;
+				var isStop = true;
 				for(var attr in json){
 					var now = 0;
 					if(attr == 'opacity'){
@@ -59,10 +60,10 @@ function Lunbo(mylunbo){
 						obj.css(attr,cur + 'px');
 					}
 					if(json[attr] !== cur){
-						stop = false;
+						isStop = false;
 					}
 				}
-				if(stop){
+				if(isStop){
 					clearInterval(obj.timer);
 					callback&&callback();
 				}
@@ -70,14 +71,14 @@ function Lunbo(mylunbo){
 		}
 		slider.css('width',(count+2)*1200+'px');
 		//鼠标移入移出
-		contain.mouseover(function () { 
-			lunbo(left,{opacity:50})
-			lunbo(right,{opacity:50})
+		box.mouseover(function () { 
+			animate(left,{opacity:50})
+			animate(right,{opacity:50})
 			clearInterval(timer)
 		});
-		contain.mouseout(function () { 
-			lunbo(left,{opacity:0})
-			lunbo(right,{opacity:0})
+		box.mouseout(function () { 
+			animate(left,{opacity:0})
+			animate(right,{opacity:0})
 			timer = setInterval(down, times);
 		});
 		function moved(){
@@ -97,38 +98,38 @@ function Lunbo(mylunbo){
 			$(nav[i]).click(function () { 
 				index = this.index+1;
 				moved();
-				lunbo(slider,{left:-1200*index});
+				animate(slider,{left:-1200*index});
 			});
 		}
 		//左右移动
 		function down(){
-			if(moved){
+			if(isMoving){
 				return;
 			}
-			moved = true;
+			isMoving = true;
 			index++;
 			moved();
-			lunbo(slider,{left:-1200*index},function(){
+			animate(slider,{left:-1200*index},function(){
 				if(index==count+1){ 			
 					slider.css('left','-1200px');
 					index = 1;
 				}
-				moved = false;
+				isMoving = false;
 			});
 		}
 		function up(){
-			if(moved){
+			if(isMoving){
 				return;
 			}
-			moved = true;
+			isMoving = true;
 			index--;
 			moved();
-			lunbo(slider,{left:-1200*index},function(){
+			animate(slider,{left:-1200*index},function(){
 				if(index==0){
 					slider.css('left',-1200*count + 'px'); 
 					index = count; 
 				}
-				moved = false;
+				isMoving = false;
 			});
 		}
 		right.click(function () { 
