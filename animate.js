@@ -1,40 +1,39 @@
-function Lunbo(a){
-	var number = a.num;
-	var srcarr = a.imgs;
-	var boxs = a.box;
-	var times = a.time;
+function Animate(imgobj){
+	var num = imgobj.imgs_num;
+	var srcarr = imgobj.imgs_src;
+	var container = imgobj.imgs_container;
+	var atimer = imgobj.timer;
 
-	var box = $(boxs);
+	var box = $(container);
 
-	var box1 = '<div class="slide"><img src="'+srcarr[number-1]+'" alt=""></div>';
-	var box2 = '';
-	
-	var lunbohtml = ''
+	var imgContainer = '<div class="slide"><img src="'+srcarr[num-1]+'" alt=""></div>';
+	var liContainer = '';
+	for(var i=0;i<num;i++){
+		var j=i;
+		imgContainer += '<div class="slide"><img src="'+srcarr[i]+'" alt=""></div>';
+		if(i===0){
+			j++;
+			liContainer += '<li class="active">'+j+'</li>'
+		}else{
+			j++;
+			liContainer += '<li>'+j+'</li>';
+		}
+	}
+	imgContainer += '<div class="slide"><img src="'+srcarr[0]+'" alt=""></div>';
+
+	var html = ''
 	    + '<div class="slider" id="slider">'
-			+ box1
+			+ imgContainer
 		+ '</div>'
 		+ '<span id="left"><</span>'
 		+ '<span id="right">></span>'
 		+ '<ul class="nav" id="navs">'
-		    + box2
+		    + liContainer
 		+ '</ul>';
-
-	for(var i=0;i<number;i++){
-		var j=i;
-		box1 += '<div class="slide"><img src="'+srcarr[i]+'" alt=""></div>';
-		if(i===0){
-			j++;
-			box2 += '<li class="active">'+j+'</li>'
-		}else{
-			j++;
-			box2 += '<li>'+j+'</li>';
-		}
-	}
-	box1 += '<div class="slide"><img src="'+srcarr[0]+'" alt=""></div>';
 
 	
 	this.show = function(){		
-		box.html(lunbohtml);
+		box.html(html);
 		
 		var oNavlist = $('#navs').children('li');
 		var slider = $('#slider');		
@@ -44,7 +43,7 @@ function Lunbo(a){
 		var timer;
 		var isMoving = false;
 
-		slider.css('width',(number+2)*1200+'px');
+		slider.css('width',(num+2)*1200+'px');
 		
 		box.mouseover(function () { 
 			animate(left,{opacity:50})
@@ -54,7 +53,7 @@ function Lunbo(a){
 		box.mouseout(function () { 
 			animate(left,{opacity:0})
 			animate(right,{opacity:0})
-			timer = setInterval(next, times);
+			timer = setInterval(next, atimer);
 		});
 		right.click(function () { 
 			next();
@@ -79,7 +78,7 @@ function Lunbo(a){
 			index++;
 			navmove();
 			animate(slider,{left:-1200*index},function(){
-				if(index==number+1){ 			
+				if(index==num+1){ 			
 					slider.css('left','-1200px');
 					index = 1;
 				}
@@ -95,8 +94,8 @@ function Lunbo(a){
 			navmove();
 			animate(slider,{left:-1200*index},function(){
 				if(index==0){
-					slider.css('left',-1200*number + 'px'); 
-					index = number; 
+					slider.css('left',-1200*num + 'px'); 
+					index = num; 
 				}
 				isMoving = false;
 			});
@@ -105,15 +104,15 @@ function Lunbo(a){
 			for( var i=0; i<oNavlist.length; i++ ){
 				$(oNavlist[i]).removeClass("active");
 			}
-			if(index > number ){ 
+			if(index > num ){ 
 				$(oNavlist[0]).addClass("active");
 			}else if(index<=0){
-				$(oNavlist[number-1]).addClass("active"); 
+				$(oNavlist[num-1]).addClass("active"); 
 			}else {
 				$(oNavlist[index-1]).addClass("active");
 			}
 		}
-		timer = setInterval(next, times);
+		timer = setInterval(next, atimer);
 		function getStyle(obj, attr){
 			return obj.css(attr);
 		}

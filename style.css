@@ -18,13 +18,11 @@ ul,li{
 	margin-top:10px;
 	position: relative;
 	overflow: hidden;
-	z-index: 999;
 }
 .slider{
 	width: 8400px;
 	position: absolute;
 	left: -1200px;
-	z-index: 1000;
 }
 .slide{
 	width: 1200px;
