@@ -1,121 +1,45 @@
 function Lunbo(mylunbo){
-	var num = mylunbo.number;
-	var srcarr = mylunbo.imgs;
-	var container = mylunbo.boxName;
-	var atimer = mylunbo.timer;
-
-	var box = $(container);
-
-	var imgContainer = '<div class="slide"><img src="'+srcarr[num-1]+'" alt=""></div>';
-	var liContainer = '';
-	for(var i=0;i<num;i++){
-		var j=i;
-		imgContainer += '<div class="slide"><img src="'+srcarr[i]+'" alt=""></div>';
-		if(i===0){
-			j++;
-			liContainer += '<li class="active">'+j+'</li>'
-		}else{
-			j++;
-			liContainer += '<li>'+j+'</li>';
-		}
-	}
-	imgContainer += '<div class="slide"><img src="'+srcarr[0]+'" alt=""></div>';
-
-	var html = ''
+	var count = mylunbo.number;
+	var images = mylunbo.imgs;
+	var boxs = mylunbo.boxName;
+	var times = mylunbo.time;
+	var box = $(boxs);
+	var box1 = '<div class="slide"><img src="'+images[count-1]+'" alt=""></div>';
+	var box2 = '';
+	
+	var lunbohtml = ''
 	    + '<div class="slider" id="slider">'
-			+ imgContainer
+			+ box1
 		+ '</div>'
 		+ '<span id="left"><</span>'
 		+ '<span id="right">></span>'
 		+ '<ul class="nav" id="navs">'
-		    + liContainer
+		    + box2
 		+ '</ul>';
 
+	for(var i=0;i<count;i++){
+		var j=i;
+		box1 += '<div class="slide"><img src="'+images[i]+'" alt=""></div>';
+		if(i===0){
+			j++;
+			box2 += '<li class="active">'+j+'</li>'
+		}else{
+			j++;
+			box2 += '<li>'+j+'</li>';
+		}
+	}
+	box1 += '<div class="slide"><img src="'+images[0]+'" alt=""></div>';
 	
 	this.show = function(){		
-		box.html(html);
+		box.html(lunbohtml);
 		
-		var oNavlist = $('#navs').children('li');
+		var nav = $('#navs').children('li');
 		var slider = $('#slider');		
 		var left = $('#left');
 		var right = $('#right');
 		var index = 1;
 		var timer;
 		var isMoving = false;
-
-		slider.css('width',(num+2)*1200+'px');
-		
-		box.mouseover(function () { 
-			animate(left,{opacity:50})
-			animate(right,{opacity:50})
-			clearInterval(timer)
-		});
-		box.mouseout(function () { 
-			animate(left,{opacity:0})
-			animate(right,{opacity:0})
-			timer = setInterval(next, atimer);
-		});
-		right.click(function () { 
-			next();
-		});
-		left.click(function(){
-			prev();
-		});
-
-		for( var i=0; i<oNavlist.length; i++ ){
-			oNavlist[i].index = i;
-			$(oNavlist[i]).click(function () { 
-				index = this.index+1;
-				navmove();
-				animate(slider,{left:-1200*index});
-			});
-		}
-		function next(){
-			if(isMoving){
-				return;
-			}
-			isMoving = true;
-			index++;
-			navmove();
-			animate(slider,{left:-1200*index},function(){
-				if(index==num+1){ 			
-					slider.css('left','-1200px');
-					index = 1;
-				}
-				isMoving = false;
-			});
-		}
-		function prev(){
-			if(isMoving){
-				return;
-			}
-			isMoving = true;
-			index--;
-			navmove();
-			animate(slider,{left:-1200*index},function(){
-				if(index==0){
-					slider.css('left',-1200*num + 'px'); 
-					index = num; 
-				}
-				isMoving = false;
-			});
-		}
-		function navmove(){
-			for( var i=0; i<oNavlist.length; i++ ){
-				$(oNavlist[i]).removeClass("active");
-			}
-			if(index > num ){ 
-				$(oNavlist[0]).addClass("active");
-			}else if(index<=0){
-				$(oNavlist[num-1]).addClass("active"); 
-			}else {
-				$(oNavlist[index-1]).addClass("active");
-			}
-		}
-		timer = setInterval(next, atimer);
-		function getStyle(obj, attr){
-			return obj.css(attr);
-		}
 		function animate(obj,json,callback){
 			clearInterval(obj.timer);
 			obj.timer = setInterval(function(){
@@ -144,6 +68,79 @@ function Lunbo(mylunbo){
 					callback&&callback();
 				}
 			}, 30)
+		}
+		slider.css('width',(count+2)*1200+'px');
+		//鼠标移入移出
+		box.mouseover(function () { 
+			animate(left,{opacity:50})
+			animate(right,{opacity:50})
+			clearInterval(timer)
+		});
+		box.mouseout(function () { 
+			animate(left,{opacity:0})
+			animate(right,{opacity:0})
+			timer = setInterval(down, times);
+		});
+		function moved(){
+			for( var i=0; i<nav.length; i++ ){
+				$(nav[i]).removeClass("active");
+			}
+			if(index > count ){ 
+				$(nav[0]).addClass("active");
+			}else if(index<=0){
+				$(nav[count-1]).addClass("active"); 
+			}else {
+				$(nav[index-1]).addClass("active");
+			}
+		}
+		for( var i=0; i<nav.length; i++ ){
+			nav[i].index = i;
+			$(nav[i]).click(function () { 
+				index = this.index+1;
+				moved();
+				animate(slider,{left:-1200*index});
+			});
+		}
+		//左右移动
+		function down(){
+			if(isMoving){
+				return;
+			}
+			isMoving = true;
+			index++;
+			moved();
+			animate(slider,{left:-1200*index},function(){
+				if(index==count+1){ 			
+					slider.css('left','-1200px');
+					index = 1;
+				}
+				isMoving = false;
+			});
+		}
+		function up(){
+			if(isMoving){
+				return;
+			}
+			isMoving = true;
+			index--;
+			moved();
+			animate(slider,{left:-1200*index},function(){
+				if(index==0){
+					slider.css('left',-1200*count + 'px'); 
+					index = count; 
+				}
+				isMoving = false;
+			});
+		}
+		right.click(function () { 
+			down();
+		});
+		left.click(function(){
+			up();
+		});
+		timer = setInterval(down, times);
+		function getStyle(obj, attr){
+			return obj.css(attr);
 		}
 	}
 
