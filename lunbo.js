@@ -1,14 +1,14 @@
 function Lunbo(imgobj){
-	var numner = imgobj.num;
-	var srcarr = imgobj.imgs;
-	var container = imgobj.box;
-	var atimer = imgobj.time;
+	var num = imgobj.imgs_num;
+	var srcarr = imgobj.imgs_src;
+	var container = imgobj.imgs_container;
+	var atimer = imgobj.timer;
 
 	var box = $(container);
 
-	var imgContainer = '<div class="slide"><img src="'+srcarr[numner-1]+'" alt=""></div>';
+	var imgContainer = '<div class="slide"><img src="'+srcarr[num-1]+'" alt=""></div>';
 	var liContainer = '';
-	for(var i=0;i<numner;i++){
+	for(var i=0;i<num;i++){
 		var j=i;
 		imgContainer += '<div class="slide"><img src="'+srcarr[i]+'" alt=""></div>';
 		if(i===0){
@@ -43,7 +43,7 @@ function Lunbo(imgobj){
 		var timer;
 		var isMoving = false;
 
-		slider.css('width',(numner+2)*1200+'px');
+		slider.css('width',(num+2)*1200+'px');
 		
 		box.mouseover(function () { 
 			animate(left,{opacity:50})
@@ -78,7 +78,7 @@ function Lunbo(imgobj){
 			index++;
 			navmove();
 			animate(slider,{left:-1200*index},function(){
-				if(index==numner+1){ 			
+				if(index==num+1){ 			
 					slider.css('left','-1200px');
 					index = 1;
 				}
@@ -94,8 +94,8 @@ function Lunbo(imgobj){
 			navmove();
 			animate(slider,{left:-1200*index},function(){
 				if(index==0){
-					slider.css('left',-1200*numner + 'px'); 
-					index = numner; 
+					slider.css('left',-1200*num + 'px'); 
+					index = num; 
 				}
 				isMoving = false;
 			});
@@ -104,10 +104,10 @@ function Lunbo(imgobj){
 			for( var i=0; i<oNavlist.length; i++ ){
 				$(oNavlist[i]).removeClass("active");
 			}
-			if(index > numner ){ 
+			if(index > num ){ 
 				$(oNavlist[0]).addClass("active");
 			}else if(index<=0){
-				$(oNavlist[numner-1]).addClass("active"); 
+				$(oNavlist[num-1]).addClass("active"); 
 			}else {
 				$(oNavlist[index-1]).addClass("active");
 			}
