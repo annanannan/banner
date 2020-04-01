@@ -1,34 +1,34 @@
 function Lunbo(mylunbo){
 	var count = mylunbo.number;
-	var images = mylunbo.imgs;
+	var srcarr = mylunbo.imgs;
 	var container = mylunbo.boxName;
 	var atimer = mylunbo.timer;
 
 	var box = $(container);
 
-	var box1 = '<div class="slide"><img src="'+images[count-1]+'" alt=""></div>';
-	var box2 = '';
+	var imgContainer = '<div class="slide"><img src="'+srcarr[count-1]+'" alt=""></div>';
+	var liContainer = '';
 	for(var i=0;i<count;i++){
 		var j=i;
-		box1 += '<div class="slide"><img src="'+images[i]+'" alt=""></div>';
+		imgContainer += '<div class="slide"><img src="'+srcarr[i]+'" alt=""></div>';
 		if(i===0){
 			j++;
-			box2 += '<li class="active">'+j+'</li>'
+			liContainer += '<li class="active">'+j+'</li>'
 		}else{
 			j++;
-			box2 += '<li>'+j+'</li>';
+			liContainer += '<li>'+j+'</li>';
 		}
 	}
-	box1 += '<div class="slide"><img src="'+images[0]+'" alt=""></div>';
+	imgContainer += '<div class="slide"><img src="'+srcarr[0]+'" alt=""></div>';
 
 	var html = ''
 	    + '<div class="slider" id="slider">'
-			+ box1
+			+ imgContainer
 		+ '</div>'
 		+ '<span id="left"><</span>'
 		+ '<span id="right">></span>'
 		+ '<ul class="nav" id="navs">'
-		    + box2
+		    + liContainer
 		+ '</ul>';
 
 	
