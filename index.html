@@ -15,18 +15,13 @@
 	<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="lunbo.js"></script>
 	<script>
-		var lunbo = new Lunbo();
-		lunbo.show({
+		var obj = new Lunbo({
 			num:5,
+			imgs:['img/b1.png','img/b2.png','img/b3.png','img/b4.png','img/b5.png'],
 			box:'#box',
-			imgs:[ 'img/b1.png',
-				   'img/b2.png',
-				   'img/b3.png',
-				   'img/b4.png',
-				   'img/b5.png',
-		         ],
-			time:2000
+			time:1000
 		});
+		obj.show();
 	</script>
 	
 </html>
