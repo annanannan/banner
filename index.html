@@ -15,8 +15,7 @@
 	<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="lunbo.js"></script>
 	<script>
-		var mylunbo = new Lunbo;
-		mylunbo.show({
+		var mylunbo = new Lunbo({
 			number:5,
 			imgs:['img/b1.png',
 			      'img/b2.png',
@@ -26,6 +25,7 @@
 			boxName:'#box',
 			timer:1000
 		});
+		mylunbo.show();
 	</script>
 	
 </html>
