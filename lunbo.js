@@ -3,7 +3,7 @@ function Lunbo(mylunbo){
 	var images = mylunbo.imgs;
 	var boxs = mylunbo.boxName;
 	var times = mylunbo.time;
-	var box = $(boxs);
+	var contain = $(boxs);
 	var box1 = '<div class="slide"><img src="'+images[count-1]+'" alt=""></div>';
 	var box2 = '';
 	
@@ -31,19 +31,18 @@ function Lunbo(mylunbo){
 	box1 += '<div class="slide"><img src="'+images[0]+'" alt=""></div>';
 	
 	this.show = function(){		
-		box.html(lunbohtml);
-		
-		var nav = $('#navs').children('li');
-		var slider = $('#slider');		
+		contain.html(lunbohtml);
 		var left = $('#left');
 		var right = $('#right');
+		var nav = $('#navs').children('li');
+		var slider = $('#slider');		
 		var index = 1;
 		var timer;
-		var isMoving = false;
-		function animate(obj,json,callback){
+		var moved = false;
+		function lunbo(obj,json,callback){
 			clearInterval(obj.timer);
 			obj.timer = setInterval(function(){
-				var isStop = true;
+				var stop = true;
 				for(var attr in json){
 					var now = 0;
 					if(attr == 'opacity'){
@@ -60,10 +59,10 @@ function Lunbo(mylunbo){
 						obj.css(attr,cur + 'px');
 					}
 					if(json[attr] !== cur){
-						isStop = false;
+						stop = false;
 					}
 				}
-				if(isStop){
+				if(stop){
 					clearInterval(obj.timer);
 					callback&&callback();
 				}
@@ -71,14 +70,14 @@ function Lunbo(mylunbo){
 		}
 		slider.css('width',(count+2)*1200+'px');
 		//鼠标移入移出
-		box.mouseover(function () { 
-			animate(left,{opacity:50})
-			animate(right,{opacity:50})
+		contain.mouseover(function () { 
+			lunbo(left,{opacity:50})
+			lunbo(right,{opacity:50})
 			clearInterval(timer)
 		});
-		box.mouseout(function () { 
-			animate(left,{opacity:0})
-			animate(right,{opacity:0})
+		contain.mouseout(function () { 
+			lunbo(left,{opacity:0})
+			lunbo(right,{opacity:0})
 			timer = setInterval(down, times);
 		});
 		function moved(){
@@ -98,38 +97,38 @@ function Lunbo(mylunbo){
 			$(nav[i]).click(function () { 
 				index = this.index+1;
 				moved();
-				animate(slider,{left:-1200*index});
+				lunbo(slider,{left:-1200*index});
 			});
 		}
 		//左右移动
 		function down(){
-			if(isMoving){
+			if(moved){
 				return;
 			}
-			isMoving = true;
+			moved = true;
 			index++;
 			moved();
-			animate(slider,{left:-1200*index},function(){
+			lunbo(slider,{left:-1200*index},function(){
 				if(index==count+1){ 			
 					slider.css('left','-1200px');
 					index = 1;
 				}
-				isMoving = false;
+				moved = false;
 			});
 		}
 		function up(){
-			if(isMoving){
+			if(moved){
 				return;
 			}
-			isMoving = true;
+			moved = true;
 			index--;
 			moved();
-			animate(slider,{left:-1200*index},function(){
+			lunbo(slider,{left:-1200*index},function(){
 				if(index==0){
 					slider.css('left',-1200*count + 'px'); 
 					index = count; 
 				}
-				isMoving = false;
+				moved = false;
 			});
 		}
 		right.click(function () { 
