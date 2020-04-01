@@ -1,22 +1,13 @@
 function Lunbo(mylunbo){
 	var count = mylunbo.number;
 	var images = mylunbo.imgs;
-	var boxs = mylunbo.boxName;
-	var times = mylunbo.time;
-	var box = $(boxs);
+	var container = mylunbo.boxName;
+	var atimer = mylunbo.timer;
+
+	var box = $(container);
+
 	var box1 = '<div class="slide"><img src="'+images[count-1]+'" alt=""></div>';
 	var box2 = '';
-	
-	var lunbohtml = ''
-	    + '<div class="slider" id="slider">'
-			+ box1
-		+ '</div>'
-		+ '<span id="left"><</span>'
-		+ '<span id="right">></span>'
-		+ '<ul class="nav" id="navs">'
-		    + box2
-		+ '</ul>';
-
 	for(var i=0;i<count;i++){
 		var j=i;
 		box1 += '<div class="slide"><img src="'+images[i]+'" alt=""></div>';
@@ -29,11 +20,22 @@ function Lunbo(mylunbo){
 		}
 	}
 	box1 += '<div class="slide"><img src="'+images[0]+'" alt=""></div>';
+
+	var html = ''
+	    + '<div class="slider" id="slider">'
+			+ box1
+		+ '</div>'
+		+ '<span id="left"><</span>'
+		+ '<span id="right">></span>'
+		+ '<ul class="nav" id="navs">'
+		    + box2
+		+ '</ul>';
+
 	
 	this.show = function(){		
-		box.html(lunbohtml);
+		box.html(html);
 		
-		var nav = $('#navs').children('li');
+		var oNavlist = $('#navs').children('li');
 		var slider = $('#slider');		
 		var left = $('#left');
 		var right = $('#right');
@@ -42,7 +44,7 @@ function Lunbo(mylunbo){
 		var isMoving = false;
 
 		slider.css('width',(count+2)*1200+'px');
-		//鼠标移入移出
+		
 		box.mouseover(function () { 
 			animate(left,{opacity:50})
 			animate(right,{opacity:50})
@@ -51,7 +53,7 @@ function Lunbo(mylunbo){
 		box.mouseout(function () { 
 			animate(left,{opacity:0})
 			animate(right,{opacity:0})
-			timer = setInterval(next, times);
+			timer = setInterval(next, atimer);
 		});
 		right.click(function () { 
 			next();
@@ -60,9 +62,9 @@ function Lunbo(mylunbo){
 			prev();
 		});
 
-		for( var i=0; i<nav.length; i++ ){
-			nav[i].index = i;
-			$(nav[i]).click(function () { 
+		for( var i=0; i<oNavlist.length; i++ ){
+			oNavlist[i].index = i;
+			$(oNavlist[i]).click(function () { 
 				index = this.index+1;
 				navmove();
 				animate(slider,{left:-1200*index});
@@ -99,18 +101,18 @@ function Lunbo(mylunbo){
 			});
 		}
 		function navmove(){
-			for( var i=0; i<nav.length; i++ ){
-				$(nav[i]).removeClass("active");
+			for( var i=0; i<oNavlist.length; i++ ){
+				$(oNavlist[i]).removeClass("active");
 			}
 			if(index > count ){ 
-				$(nav[0]).addClass("active");
+				$(oNavlist[0]).addClass("active");
 			}else if(index<=0){
-				$(nav[count-1]).addClass("active"); 
+				$(oNavlist[count-1]).addClass("active"); 
 			}else {
-				$(nav[index-1]).addClass("active");
+				$(oNavlist[index-1]).addClass("active");
 			}
 		}
-		timer = setInterval(next, times);
+		timer = setInterval(next, atimer);
 		function getStyle(obj, attr){
 			return obj.css(attr);
 		}
